@@ -1,14 +1,15 @@
 import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
-import Counter from './Counter'
 
 export default function Home () {
+  const [count, setCount] = useState(0)
   const [list, setList] = useState([])
   useEffect(() => {
     async function download () {
       const response = await fetch('http://localhost:4000/invites')
       const data = await response.json()
       setList(data.invites)
+      setCount(data.invites.length)
     }
     download()
   }, [])
@@ -20,6 +21,9 @@ export default function Home () {
       </li>
     )
   })
+  function handleClick () {
+    setCount(count + 1)
+  }
   return (
     <>
       <h2>Home</h2>
@@ -27,7 +31,7 @@ export default function Home () {
         {items}
       </ul>
       <p>There are {list.length} invites</p>
-      <Counter />
+      <button onClick={handleClick}>Count: {count}</button>
     </>
   )
 }
